@@ -1,0 +1,6 @@
+transaction_id,amount,timestamp,category,description
+1,150.50,2023-01-01 12:30:00,food,restaurant dinner
+2,1200.00,2023-01-02 09:15:00,shopping,electronics purchase
+3,45.75,2023-01-03 15:00:00,food,coffee shop
+4,300.00,2023-01-04 10:00:00,shopping,clothing
+5,20.00,2023-01-05 08:45:00,transport,bus ticket

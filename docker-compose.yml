@@ -1,0 +1,84 @@
+version: '3.7'
+
+services:
+
+  db:
+    container_name: db  
+    image: postgres
+    env_file:
+    - ./core/.env
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    networks:
+      - main
+
+  backend:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    container_name: backend
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./core:/app/
+    networks:
+      - main
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_started
+      
+  rabbitmq:
+      image: rabbitmq:3.13-management
+      container_name: rabbitmq
+      user: "999:999"
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+      environment:
+        - RABBITMQ_DEFAULT_USER=guest
+        - RABBITMQ_DEFAULT_PASS=guest
+      volumes:
+        - rabbitmq_data:/var/lib/rabbitmq
+        - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      healthcheck:
+        test: ["CMD", "rabbitmqctl", "status"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+      restart: unless-stopped
+      networks:
+        - main
+      depends_on:
+        - db
+
+  worker:
+    container_name: worker
+    build: .
+    command: python3 analyzer/worker_main.py
+    environment:
+      - PYTHONPATH=/app
+      - DJANGO_SETTINGS_MODULE=core.settings
+    volumes:
+      - ./core:/app/
+    networks:
+      - main
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_started
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
+
+networks:
+  main:
