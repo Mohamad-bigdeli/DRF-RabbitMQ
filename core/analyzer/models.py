@@ -1,7 +1,9 @@
-from django.db import models
+from __future__ import annotations
+
+from django.contrib.postgres.indexes import GinIndex
 from django.db import models
 from django.db.models import JSONField
-from django.contrib.postgres.indexes import GinIndex 
+
 
 # Create your models here.
 

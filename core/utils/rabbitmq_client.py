@@ -1,10 +1,14 @@
-import pika
-import json 
+from __future__ import annotations
+
+import json
+
 from django.conf import settings
+import pika
 from pika.exceptions import AMQPConnectionError
 
+
 class RabbitMQClient:
-    
+
     def __init__(self):
         self.host = settings.RABBITMQ["HOST"]
         self.port = settings.RABBITMQ["PORT"]
@@ -16,7 +20,7 @@ class RabbitMQClient:
         self.connection = None
         self.channel = None
         self.is_connected = False
-    
+
     def connect(self) -> None:
         credentials = pika.PlainCredentials(self.username, self.password)
         parameters = pika.ConnectionParameters(
@@ -39,7 +43,7 @@ class RabbitMQClient:
             print(f"Connection attempt failed: {e}\
                   Could not connect to RabbitMQ.")
             raise
-    
+
     def publish_message(self, queue, message, routing_key) -> None:
         if not self.is_connected:
             self.connect()
@@ -50,14 +54,14 @@ class RabbitMQClient:
                 exchange=self.exchange,
                 routing_key=routing_key or queue,
                 body=json.dumps(message),
-                properties=pika.BasicProperties(delivery_mode=2) 
+                properties=pika.BasicProperties(delivery_mode=2)
             )
             print(f"Message published to queue {queue}: {message}")
         except Exception as e:
             print(f"Failed to publish message: {e}")
             self.is_connected = False
             raise
-    
+
     def consume_message(self, queue, callback, auto_ack=True) -> None:
         if not self.is_connected:
             self.connect()
@@ -70,7 +74,7 @@ class RabbitMQClient:
             print(f"Failed to consume messages: {e}")
             self.is_connected = False
             raise
-    
+
     def close(self) -> None:
         try:
             if self.channel and self.channel.is_open:

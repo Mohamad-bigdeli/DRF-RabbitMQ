@@ -4,3 +4,4 @@ pika
 pandas
 psycopg2-binary
 python-decouple
+ruff

@@ -1,10 +1,15 @@
+from __future__ import annotations
+
+import json
+import os
 import threading
+import time
+
 from utils.analyze_csv import analyze_csv
 from utils.rabbitmq_client import RabbitMQClient
-import json
-from .models import UploadedFile, AnalysisResult
-import time
-import os
+
+from .models import AnalysisResult, UploadedFile
+
 
 class AnalyzerConsumer(threading.Thread):
 
@@ -51,22 +56,21 @@ class AnalyzerConsumer(threading.Thread):
             time.sleep(7)
 
             if results:
-                print(f"[Callback] Analysis completed successfully.")
+                print("[Callback] Analysis completed successfully.")
                 uploadedfile.status = "completed"
                 AnalysisResult.objects.create(file=uploadedfile, results=results)
             else:
-                print(f"[Callback] Analysis failed or returned empty.")
+                print("[Callback] Analysis failed or returned empty.")
                 uploadedfile.status = "failed"
 
             uploadedfile.save()
-            print(f"[Callback] Processing complete and message acknowledged.")
+            print("[Callback] Processing complete and message acknowledged.")
 
         except Exception as e:
             print(f"[Callback] Exception occurred: {e}")
-    
+
     def run(self):
         print("consumer running in thread...")
         self.rabbitmq_client.consume_message(queue="analyzer_queue", callback=self.callback)
-        
 
-        
+

@@ -1,5 +1,9 @@
+from __future__ import annotations
+
 from rest_framework import serializers
+
 from .models import AnalysisResult, UploadedFile
+
 
 class UploadedFileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,7 +14,7 @@ class UploadedFileSerializer(serializers.ModelSerializer):
     def validate_file(self, value):
         if not value.name.endswith('.csv'):
             raise serializers.ValidationError("File must be a CSV file.")
-        max_size = 10 * 1024 * 1024  
+        max_size = 10 * 1024 * 1024
         if value.size > max_size:
             raise serializers.ValidationError("File size cannot exceed 10MB.")
         return value

@@ -1,9 +1,13 @@
+from __future__ import annotations
+
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework import status
-from .models import AnalysisResult
-from .serializers import UploadedFileSerializer, AnalysisResultSerializer
 from utils.rabbitmq_client import RabbitMQClient
+
+from .models import AnalysisResult
+from .serializers import AnalysisResultSerializer, UploadedFileSerializer
+
 
 class UploadFileView(GenericAPIView):
     serializer_class = UploadedFileSerializer
@@ -25,7 +29,7 @@ class UploadFileView(GenericAPIView):
             except Exception as e:
                 uploaded_file.status = 'failed'
                 uploaded_file.save()
-                return Response({'error': f'Failed to queue file: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({'error': f'Failed to queue file: {e!s}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AnalysisResultView(GenericAPIView):

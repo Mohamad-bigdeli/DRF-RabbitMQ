@@ -9,9 +9,12 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+from __future__ import annotations
 
 from pathlib import Path
+
 from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -155,7 +158,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # RabbitMQ Configuration
 RABBITMQ = {
-    'HOST': config("RABBITMQ_HOST"), 
+    'HOST': config("RABBITMQ_HOST"),
     'PORT': config("RABBITMQ_PORT"),
     'VIRTUAL_HOST': config("RABBITMQ_VIRTUAL_HOST"),
     'USERNAME': config("RABBITMQ_USRENAME"),

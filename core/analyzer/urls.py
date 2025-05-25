@@ -1,5 +1,9 @@
+from __future__ import annotations
+
 from django.urls import path
-from .views import UploadFileView, AnalysisResultView
+
+from .views import AnalysisResultView, UploadFileView
+
 
 app_name = "analyzer"
 
