@@ -67,7 +67,7 @@ class RabbitMQClient:
             self.connect()
         try:
             self.channel.queue_declare(queue=queue, durable=True)
-            self.channel.basic_consume(queue=queue, on_message_callback=callback, auto_ack=auto_ack)
+            self.channel.basic_consume(queue=queue, on_message_callback=callback, auto_ack=False)
             print(f"Starting to consume messages from queue {queue}")
             self.channel.start_consuming()
         except Exception as e:
