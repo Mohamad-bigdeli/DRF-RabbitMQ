@@ -13,6 +13,9 @@
 - **Message Queue**: RabbitMQ manages asynchronous task queuing for file processing.
 - **Worker**: A separate worker process consumes messages from the RabbitMQ queue, processes the CSV files, and stores results in a PostgreSQL JSONB field.
 - **Database**: PostgreSQL stores uploaded file metadata and analysis results, leveraging JSONB for flexible result storage.
+  
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
 
 ## Processing Workflow
 1. Users upload a CSV file via the API.
