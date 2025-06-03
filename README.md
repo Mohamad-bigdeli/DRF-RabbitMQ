@@ -36,14 +36,14 @@ The processing is **asynchronous**. The worker uses a `threading.Thread` to cons
    Clone the project repository to your local machine:
 
    ```bash
-   git clone https://github.com/Mohamad-bigdeli/DRF-Shop.git
+   git clone https://github.com/Mohamad-bigdeli/DRF-RabbitMQ.git
 
 2. **Navigate to the Project Folder**
 
     Move into the project directory using the cd command:
 
     ```bash
-    cd DRF-Shop
+    cd DRF-RabbitMQ
     
 
 3. **Start Docker Compose** 
